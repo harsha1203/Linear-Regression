@@ -1,0 +1,90 @@
+---
+title: "linear regression"
+author: "harsha"
+date: "April 23, 2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+```{r}
+library(moments)
+library(readr)
+library(readr)
+Salary_Data <- read_csv("D:/Modules/Module 6 - SLR/Salary_Data.csv")
+View(Salary_Data)
+attach(Salary_Data)
+
+
+#EDA
+#1st business moments
+mean(YearsExperience) #5.31
+mean(Salary_Data$Salary) #76003
+
+median(Salary_Data$YearsExperience) #4.7
+median(Salary_Data$Salary) #65237
+
+# 2nd business moments
+var(Salary_Data$YearsExperience) #8.053
+var(Salary_Data$Salary)
+
+sd(Salary_Data$YearsExperience) #2.83
+sd(Salary_Data$Salary) #27414.43
+
+range(Salary_Data$YearsExperience) #1.1 10.5
+range(Salary_Data$Salary) #37731 122391
+```
+```{r}
+
+#different visulaizations
+boxplot(Salary_Data) #no outliers
+
+hist(Salary_Data$YearsExperience)
+hist(Salary_Data$Salary)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+#3rd business moment
+library(moments)
+skewness(Salary_Data$YearsExperience) #positive skewness
+skewness(Salary_Data$Salary) #positive skewness
+#4th business moment
+kurtosis(Salary_Data$YearsExperience) #positive kurtosis
+kurtosis(Salary_Data$Salary)#positive kurtosis
+```
+```{r}
+#Normal Quantile-Quantile Plot
+qqnorm(Salary)
+qqline(Salary)
+qqnorm(YearsExperience)##Normally distributed
+qqline(YearsExperience)
+
+plot(YearsExperience,Salary) #positive relation
+
+cor(YearsExperience,Salary)
+attach(Salary_Data)
+```
+
+```{r}
+#model building
+model<- lm(YearsExperience~Salary)
+summary (model)
+#p is significant and r=0.95
+```
+
+
+```{r}
+
+confint(model,level = 0.95)
+predict(model,interval="predict")
+```
+
+```{r}
+model$residuals
+rmse<-sqrt(mean(model$residuals^2))
+rmse  #0.578
+#least RMSE value model is evualted
+```
